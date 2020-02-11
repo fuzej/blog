@@ -1,0 +1,60 @@
+package cn.fuzej.blog.util;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+/**
+ * Created by limi on 2017/10/15.
+ */
+public class MD5Utils {
+
+    /**
+     * MD5加密类
+     * @param str 要加密的字符串
+     * @return    加密后的字符串
+     */
+    /*
+    * MD5加密原理：
+    * 1.为什么加密
+    *   避免明码存储在数据库
+    *
+    * 2.给谁加密
+    *
+    * 3.怎么加密
+    *
+    *   3.1方向
+    *
+    * 4.有什么替代方法、框架
+    * */
+
+    public static String code(String str){
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            md.update(str.getBytes());
+            byte[]byteDigest = md.digest();
+            int i;
+            StringBuffer buf = new StringBuffer("");
+            for (int offset = 0; offset < byteDigest.length; offset++) {
+                i = byteDigest[offset];
+                if (i < 0)
+                    i += 256;
+                if (i < 16)
+                    buf.append("0");
+                buf.append(Integer.toHexString(i));
+            }
+            //32位加密
+            return buf.toString();
+            // 16位的加密
+            //return buf.toString().substring(8, 24);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+
+    public static void main(String[] args) {
+        System.out.println(code("123123"));
+    }
+}
